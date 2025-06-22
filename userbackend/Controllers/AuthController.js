@@ -58,12 +58,13 @@ const login = async (req, res) => {
             email: user.email,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            message: "Internal Server Error",
-            success: false,
-        });
-    }
+    console.error("Login Error:", err); // 👈 Add this line for logging
+    res.status(500).json({
+        message: "Internal Server Error",
+        success: false,
+        error: err.message  // 👈 Add this to see the actual error
+    });
+}
 };
 
 module.exports = {
