@@ -1,0 +1,19 @@
+# Environment variables
+.env                # ✅ Prevents leaking secrets like DB passwords, tokens
+
+# Node modules
+node_modules/       # ✅ Huge size; should not be pushed to GitHub
+
+# Logs
+logs
+*.log               # ✅ Keeps repo clean from server logs
+
+# Dependency lock files (optional, case-by-case)
+package-lock.json   # ⚠️ Optional only ignore this if you don't want exact version control
+
+# IDE settings
+.vscode/            # ✅ Personal editor settings shouldn't be in repo
+
+# System files
+.DS_Store           # ✅ macOS system junk
+Thumbs.db           # ✅ Windows system junk
