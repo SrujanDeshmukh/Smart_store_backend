@@ -1,5 +1,6 @@
 const UserModel = require('../Models/user')
 const axios = require('axios')
+const connectToDatabase = require("../Models/db");
 
 const getProfile = async (req, res) => {
     try{
@@ -34,13 +35,13 @@ const updateProfile = async (req, res) => {
         const updatedUser = await UserModel.findByIdAndUpdate(
             req.user._id,
             {fullName, email, mobileNumber},
-            {new: true, runValidators: true}
+            {new: true, runValidator: true}
         ).select('-password');
 
         res.json({
             success: true,
             message: 'Profile updated successfully',
-            user: updatesUser
+            user: updatedUser
         });
 
     }
@@ -104,7 +105,7 @@ const updateAddressLocation = async (req, res) => {
             return res.status(400).json({message: 'Latitude and longitude are required'});
         }
 
-        const addressData = await reverseGeocode(latitude, lognitude);
+        const addressData = await reverseGeocode(latitude, longitude);
 
         if(!addressData){
             return res.status(400).json({message: 'Unable to fetch address from coordinates'});
@@ -139,7 +140,7 @@ const updateAddressLocation = async (req, res) => {
 const reverseGeocode = async (lat, lon) => {
     try{
         const response = await axios.get(
-            'https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1',
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`,
             {
                 headers: {
                     'User-Agent': 'SmartStore/1.0'
