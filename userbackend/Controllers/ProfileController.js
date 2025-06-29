@@ -19,7 +19,7 @@ const updateProfile = async (req, res) => {
         const{fullName, email, mobileNumber} = req.body;
 
         if(!fullName || !email || !mobileNumber){
-            return res.status(400).json({message: 'All fields are required'};)
+            return res.status(400).json({message: 'All fields are required'});
         }
 
         const existingUser = await UserModel.findOne({
