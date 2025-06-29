@@ -140,28 +140,34 @@ const updateAddressLocation = async (req, res) => {
 const reverseGeocode = async (lat, lon) => {
     try{
         const response = await axios.get(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`,
+            `https://us1.locationiq.com/v1/reverse.php`,
             {
-                headers: {
-                    'User-Agent': 'SmartStore/1.0'
+                params: {
+                key: process.env.LOCATIONIQ_API_KEY,
+                lat,
+                lon,
+                format: 'json'
                 }
             }
         );
 
-        if(response.data && response.data.address){
+        if (response.data && response.data.address) {
             const addr = response.data.address;
-            return{
-                street: `${addr.house_number || ''} ${addr.road || ''}`.trim(),
-                city: addr.city || addr.town || addr.village || '',
-                state: addr.state || '',
-                pincode: addr.postcode || '',
-                country: addr.country || ''
+            return {
+            street: [addr.house_number, addr.road, addr.neighbourhood]
+            .filter(Boolean)        // removes undefined or empty values
+            .join(' ')
+            .trim(),
+            city: addr.city || addr.town || addr.village || addr.hamlet || '',
+            state: addr.state || '',
+            pincode: addr.postcode || '',
+            country: addr.country || ''
             };
         }
-        return null
+        return null;
     }
     catch(error){
-        console.error('Reverse geocoding error', error);
+        console.error('Reverse geocoding error', error.message);
         return null;
     }
 };
