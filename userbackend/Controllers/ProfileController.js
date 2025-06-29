@@ -139,6 +139,7 @@ const updateAddressLocation = async (req, res) => {
 
 const reverseGeocode = async (lat, lon) => {
     try{
+        console.log("🔍 Making reverse geocode request for:", lat, lon);
         const response = await axios.get(
             `https://us1.locationiq.com/v1/reverse.php`,
             {
@@ -150,6 +151,9 @@ const reverseGeocode = async (lat, lon) => {
                 }
             }
         );
+
+        console.log("🌍 Response data:", response.data);
+
 
         if (response.data && response.data.address) {
             const addr = response.data.address;
@@ -164,6 +168,7 @@ const reverseGeocode = async (lat, lon) => {
             country: addr.country || ''
             };
         }
+        console.warn("⚠️ Address not found in response");
         return null;
     }
     catch(error){
