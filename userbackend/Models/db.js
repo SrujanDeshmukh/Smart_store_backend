@@ -13,12 +13,7 @@ const connectionOptions = {
     serverSelectionTimeoutMS: 5000, // Reduced from default 30000ms
     socketTimeoutMS: 45000,
     bufferCommands: false, // Disable mongoose buffering for serverless
-    // bufferMaxEntries: 0, // REMOVED - This option is not supported in newer Mongoose versions
     family: 4, // Use IPv4, skip trying IPv6
-    maxPoolSize: 10, // Maximum number of connections in the connection pool
-    minPoolSize: 5, // Minimum number of connections in the connection pool
-    maxIdleTimeMS: 30000, // Close connections after 30 seconds of inactivity
-    serverSelectionRetryFreq: 2000, // How often to retry server selection
 };
 
 // Global connection cache for serverless
