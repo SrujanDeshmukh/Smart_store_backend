@@ -1,7 +1,8 @@
 // Models/db.js
 const mongoose = require('mongoose');
-
 const mongo_url = process.env.MONGO_CONN;
+
+
 
 if (!mongo_url) {
     console.error('MONGO_CONN environment variable is not defined');

@@ -19,6 +19,43 @@ const UserSchema = new schema({
         type: String,
         required: true,
     },
+    address: {
+        street: {
+            type: String,
+            default: ''
+        },
+        city: {
+            type: String,
+            default: ''
+        },
+        state: {
+            type: String,
+            default: ''
+        },
+        pincode: {
+            type: String,
+            default: ''
+        },
+        country: {
+            type: String,
+            default: ''
+        },
+        latitude: {
+            type: Number,
+            default: null
+        },
+        longitude: {
+            type: Number,
+            default: null
+        },
+        addressType: {
+            type: String,
+            enum: ['manual', 'location'],
+            default: 'manual'
+        }
+    }
+}, {
+    timestamps: true
 });
 
 const UserModel = mongoose.model('users', UserSchema);
