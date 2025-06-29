@@ -6,10 +6,8 @@ const cors = require('cors');
 const AuthRouter = require('./Routes/AuthRouter');
 const ProfileRouter = require('./Routes/ProfileRouter');
 
-
 require('./Models/db');
 const PORT = process.env.PORT || 8080;
-
 
 app.get('/ping', (req, res) => {
     res.send('PONG');
@@ -22,5 +20,4 @@ app.use('/api/profile', ProfileRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`);
-    
 })

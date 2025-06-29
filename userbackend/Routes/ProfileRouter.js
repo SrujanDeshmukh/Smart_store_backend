@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getProfile, getAddress, updateAddressManual, updateAddressLocation, updateProfile } = require('../Controllers/ProfileController');
-
-const auth = require('../Middlewares/AuthValidation');
+const { auth } = require('../Middlewares/AuthValidation');
 
 // Profile Routes
 router.get('/profile', auth, getProfile);
