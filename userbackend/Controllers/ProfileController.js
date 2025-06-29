@@ -138,44 +138,41 @@ const updateAddressLocation = async (req, res) => {
 };
 
 const reverseGeocode = async (lat, lon) => {
-    try{
-        console.log("🔍 Making reverse geocode request for:", lat, lon);
+    try {
         const response = await axios.get(
-            `https://us1.locationiq.com/v1/reverse.php`,
+            'https://us1.locationiq.com/v1/reverse.php',
             {
                 params: {
-                key: process.env.LOCATIONIQ_API_KEY,
-                lat,
-                lon,
-                format: 'json'
+                    key: process.env.LOCATIONIQ_API_KEY,
+                    lat,
+                    lon,
+                    format: 'json'
                 }
             }
         );
 
-        console.log("🌍 Response data:", response.data);
-
+        console.log("🔁 API Response:", response.data);
 
         if (response.data && response.data.address) {
             const addr = response.data.address;
             return {
-            street: [addr.house_number, addr.road, addr.neighbourhood]
-            .filter(Boolean)        // removes undefined or empty values
-            .join(' ')
-            .trim(),
-            city: addr.city || addr.town || addr.village || addr.hamlet || '',
-            state: addr.state || '',
-            pincode: addr.postcode || '',
-            country: addr.country || ''
+                street: [addr.house_number, addr.road, addr.neighbourhood].filter(Boolean).join(' ').trim(),
+                city: addr.city || addr.town || addr.village || addr.hamlet || '',
+                state: addr.state || '',
+                pincode: addr.postcode || '',
+                country: addr.country || ''
             };
         }
-        console.warn("⚠️ Address not found in response");
+
+        console.warn("⚠️ No address found in response.");
         return null;
-    }
-    catch(error){
-        console.error('Reverse geocoding error', error.message);
+
+    } catch (error) {
+        console.error("❌ Reverse Geocoding Error:", error.response?.data || error.message);
         return null;
     }
 };
+
 
 module.exports = {
     getProfile,
