@@ -1,20 +1,33 @@
+// Controllers/AuthController.js
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const UserModel = require("../Models/user");
+const connectToDatabase = require("../Models/db");
 
 const signup = async (req, res) => {
     try {
+        // Connect to database first - THIS IS THE KEY FIX
+        await connectToDatabase();
+        
         const { fullName, email, mobileNumber, password } = req.body;
-
+        
         const existingUser = await UserModel.findOne({ mobileNumber });
         if (existingUser) {
-            return res.status(409).json({ message: 'User already exists, you can login', success: false });
+            return res.status(409).json({ 
+                message: 'User already exists, you can login', 
+                success: false 
+            });
         }
-
+        
         const hashedPassword = await bcrypt.hash(password, 10);
-        const userModel = new UserModel({ fullName, email, mobileNumber, password: hashedPassword });
+        const userModel = new UserModel({ 
+            fullName, 
+            email, 
+            mobileNumber, 
+            password: hashedPassword 
+        });
         await userModel.save();
-
+        
         res.status(201).json({
             message: "Signup successful",
             success: true,
@@ -31,25 +44,28 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
     try {
+        // Connect to database first - THIS IS THE KEY FIX
+        await connectToDatabase();
+        
         const { username, password } = req.body;
         const errorMsg = "Auth Failed: Mobile number or password is incorrect";
-
+        
         const user = await UserModel.findOne({ mobileNumber: username });
         if (!user) {
             return res.status(403).json({ message: errorMsg, success: false });
         }
-
+        
         const isPassEqual = await bcrypt.compare(password, user.password);
         if (!isPassEqual) {
             return res.status(403).json({ message: errorMsg, success: false });
         }
-
+        
         const jwtToken = jwt.sign(
             { _id: user.id, email: user.email },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
-
+        
         res.status(201).json({
             message: "Login successful",
             success: true,
@@ -58,13 +74,13 @@ const login = async (req, res) => {
             email: user.email,
         });
     } catch (err) {
-    console.error("Login Error:", err); // 👈 Add this line for logging
-    res.status(500).json({
-        message: "Internal Server Error",
-        success: false,
-        error: err.message  // 👈 Add this to see the actual error
-    });
-}
+        console.error("Login Error:", err);
+        res.status(500).json({
+            message: "Internal Server Error",
+            success: false,
+            error: err.message
+        });
+    }
 };
 
 module.exports = {
