@@ -5,7 +5,7 @@ const { auth } = require('../Middlewares/AuthValidation');
 
 // Profile Routes
 router.get('/profile', auth, getProfile);
-router.put('/profile', auth, updateProfile);
+router.put('/profile/update', auth, updateProfile);
 
 // Address Routes
 router.get('/address', auth, getAddress);
