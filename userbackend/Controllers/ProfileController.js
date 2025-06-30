@@ -3,18 +3,17 @@ const axios = require('axios')
 const connectToDatabase = require("../Models/db");
 
 const getProfile = async (req, res) => {
-    try{
-        const user = await UserModel.findById(req.user._id).select('-password');
-        if(!user) {
-            return res.status(404).json({ message: 'User not found'});
+    try {
+        const user = await UserModel.findById(req.user._id).select('fullName email mobileNumber');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
         }
-        res.json({success: true, user });
+        res.json({ success: true, user });
     }
     catch (error) {
-        res.status(500).json({ message: 'Server error', error: error.message});
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
-
 const updateProfile = async (req, res) => {
     try{
         const{fullName, email, mobileNumber} = req.body;
