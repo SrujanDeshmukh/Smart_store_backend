@@ -123,8 +123,8 @@ const login = async (req, res) => {
         console.log("5. User found:", !!user);
         
         if (!user) {
-            console.log("6. User not found, returning 403");
-            return res.status(403).json({ message: errorMsg, success: false });
+            console.log("6. User not found, returning 401");
+            return res.status(401).json({ message: errorMsg, success: false });
         }
         
         console.log("7. Comparing passwords...");
@@ -132,8 +132,8 @@ const login = async (req, res) => {
         console.log("8. Password match:", isPassEqual);
         
         if (!isPassEqual) {
-            console.log("9. Password mismatch, returning 403");
-            return res.status(403).json({ message: errorMsg, success: false });
+            console.log("9. Password mismatch, returning 401");
+            return res.status(401).json({ message: errorMsg, success: false });
         }
         
         console.log("10. Generating JWT token...");
@@ -146,7 +146,7 @@ const login = async (req, res) => {
         }
         
         const jwtToken = jwt.sign(
-            { _id: user.id, email: user.email },
+            { _id: user._id, email: user.email },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
